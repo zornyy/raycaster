@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
+#include "player.h"
 #include "display.h"
 #include "map.h"
 
@@ -42,6 +43,12 @@ void drawRect( SDL_Rect *rect, SDL_Color *color ) {
 void drawMapTile( SDL_Rect *rect ) {
   SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
   SDL_RenderDrawRect( renderer, rect );
+}
+
+void drawPlayer( player_t *player ) {
+  SDL_SetRenderDrawColor( renderer, 255, 0, 255, 255 );
+  SDL_RenderDrawPoint( renderer, player->x, player->y );
+  SDL_Log( "Drew player at x = %f, y = %f", player->x, player->y );
 }
 
 int displayInit( ) {
@@ -93,6 +100,7 @@ int renderLoop( ) {
     
     // Tick content
     drawMap( ); 
+    drawPlayer( &player );
 
     // Render current frame
     SDL_RenderPresent( renderer );
