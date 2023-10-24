@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 #include "display.h"
+#include "map.h"
 
 #define HEIGHT 1080
 #define WIDTH 1920
@@ -28,9 +29,19 @@ int fixFramerate( ) {
 
 
 // Public functions
+void clearDisplay( ) {
+  SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
+  SDL_RenderClear( renderer );
+}
+
 void drawRect( SDL_Rect *rect, SDL_Color *color ) {
   SDL_SetRenderDrawColor( renderer, color->r, color->g, color->b, color->a );
   SDL_RenderFillRect( renderer, rect );
+}
+
+void drawMapTile( SDL_Rect *rect ) {
+  SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
+  SDL_RenderDrawRect( renderer, rect );
 }
 
 int displayInit( ) {
@@ -77,9 +88,11 @@ int renderLoop( ) {
         isRunning = false;
       }
     }
+    // Clear display before drawing frame
+    clearDisplay( );
     
     // Tick content
-    
+    drawMap( ); 
 
     // Render current frame
     SDL_RenderPresent( renderer );
