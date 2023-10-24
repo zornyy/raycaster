@@ -8,7 +8,7 @@
 ## Build 🏗️
 ```shell
 # SDL2 library required
-$ git clone https: https://github.com/xZORNYx/raycaster.git
+$ git clone https://github.com/xZORNYx/raycaster.git
 $ cd raycaster
 $ make
 $ ./raycaster
