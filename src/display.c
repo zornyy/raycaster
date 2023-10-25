@@ -14,7 +14,7 @@ SDL_Renderer *renderer;
 
 // Framerate
 const int FPS = 60;
-const int frameDelay;
+const int frameDelay = 1000 / FPS;
 Uint64 frameStart;
 Uint64 frameTime;
 
@@ -45,10 +45,10 @@ void drawMapTile( SDL_Rect *rect ) {
   SDL_RenderDrawRect( renderer, rect );
 }
 
-void drawPlayer( player_t *player ) {
+void drawPoint( double posX, double posY ) {
   SDL_SetRenderDrawColor( renderer, 255, 0, 255, 255 );
-  SDL_RenderDrawPoint( renderer, player->x, player->y );
-  SDL_Log( "Drew player at x = %f, y = %f", player->x, player->y );
+  SDL_RenderDrawPoint( renderer, posX, posY );
+  SDL_Log( "Drew player at x = %f, y = %f", posX, posY );
 }
 
 int displayInit( ) {
@@ -99,8 +99,9 @@ int renderLoop( ) {
     clearDisplay( );
     
     // Tick content
-    drawMap( ); 
-    drawPlayer( &player );
+    drawMap( );
+    movePlayer( 270.0, 1.0 );
+    drawPlayer( );
 
     // Render current frame
     SDL_RenderPresent( renderer );

@@ -7,9 +7,12 @@ typedef struct {
   double direction;
 } player_t;
 
-extern player_t player;
 
 int playerInit( double posX, double posY );
+
+void drawPlayer( );
+
+void movePlayer ( double direction, double distance );
 
 
 #endif // !raycaster

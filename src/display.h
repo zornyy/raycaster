@@ -15,5 +15,7 @@ void drawRect( SDL_Rect *rect, SDL_Color *color );
 
 void drawMapTile( SDL_Rect *rect );
 
+void drawPoint( double posX, double posY );
+
 void drawMap( );
 #endif 
