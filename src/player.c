@@ -14,6 +14,7 @@ int playerInit( double posX, double posY ) {
   player.x = posX;
   player.y = posY;
   player.direction = 0;
+  player.speed = 1;
   
   playerRect.h = 10;
   playerRect.w = 10;
@@ -27,9 +28,59 @@ void drawPlayer( ) {
   drawRect( &playerRect, &purple );
 }
 
-void movePlayer( double direction, double distance ) {
-  direction = ( direction * PI ) / 180;
-  double x = cos( direction ) * distance;
-  player.x += x;
-  player.y += sqrt( pow( distance, 2 ) - pow( x, 2 ) );
+point_2d calcMovement(
+    double x, 
+    double y, 
+    double direc,
+    double dist 
+  ) {
+  direc = ( direc * PI ) / 180;
+  x += cos( direc ) * dist;
+  y += sqrt( pow( dist, 2 ) - pow( x, 2 ) );
+  point_2d res = { x, y };
+  return res;
+}
+
+void movePlayer( int direction ) {
+  point_2d newPos;
+  switch ( direction ) {
+    case SDLK_w:
+      newPos = calcMovement( 
+        player.x, 
+        player.y, 
+        player.direction, 
+        player.speed 
+      );
+      break;
+    
+    case SDLK_d:
+      newPos = calcMovement( 
+        player.x, 
+        player.y, 
+        player.direction + 90, 
+        player.speed 
+      );
+      break;
+    
+    case SDLK_s:
+      newPos = calcMovement( 
+        player.x, 
+        player.y, 
+        player.direction + 180, 
+        player.speed 
+      );
+      break;
+
+    case SDLK_a:
+      newPos = calcMovement( 
+        player.x, 
+        player.y, 
+        player.direction + 270, 
+        player.speed 
+      );
+      break;
+  }
+
+  player.x = newPos.x;
+  player.y = newPos.y;
 }

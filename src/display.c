@@ -28,6 +28,13 @@ int fixFramerate( ) {
   }
 }
 
+void handleKeyPress( int key ) {
+  // Update keyboard state
+}
+
+void handleKeyRelease( int key ) {
+  // Update keyboard state  
+}
 
 // Public functions
 void clearDisplay( ) {
@@ -93,6 +100,10 @@ int renderLoop( ) {
     while ( SDL_PollEvent( &windowEvent ) ) {
       if ( SDL_QUIT == windowEvent.type ) {
         isRunning = false;
+      } else if ( SDL_KEYDOWN == windowEvent.type ) {
+        handleKeyPress( windowEvent.key.keysym.sym );
+      } else if ( SDL_KEYUP == windowEvent.type ) {
+        handleKeyRelease( windowEvent.key.keysym.sym );
       }
     }
     // Clear display before drawing frame
@@ -100,7 +111,6 @@ int renderLoop( ) {
     
     // Tick content
     drawMap( );
-    movePlayer( 270.0, 1.0 );
     drawPlayer( );
 
     // Render current frame
