@@ -3,84 +3,107 @@
 #include "player.h"
 #include "display.h"
 
-#define PI 3.141592654
-
 player_t player;
+controls_t controls;
 SDL_Rect playerRect;
 SDL_Color purple = { 255, 0, 255, 255 };
 
+
+void initControls( ) {
+  controls.forward = 0;
+  controls.backward = 0;
+  controls.right = 0;
+  controls.right = 0;
+}
+
+// This function initializes the player with it's position, direction etc. etc.
 int playerInit( double posX, double posY ) {
   SDL_Log("Initializing player\n");
-  player.x = posX;
-  player.y = posY;
-  player.direction = 0;
-  player.speed = 1;
+  player.position.x = posX;
+  player.position.y = posY;
+  player.direction.x = 1;
+  player.direction.y = 1;
   
   playerRect.h = 10;
   playerRect.w = 10;
 
+  initControls();
+
   return 1;
 }
 
+// Function draws the player on screen
 void drawPlayer( ) {
-  playerRect.x = player.x - 5;
-  playerRect.y = player.y - 5;
+  playerRect.x = player.position.x - 5;
+  playerRect.y = player.position.y - 5;
   drawRect( &playerRect, &purple );
 }
 
-point_2d calcMovement(
-    double x, 
-    double y, 
-    double direc,
-    double dist 
-  ) {
-  direc = ( direc * PI ) / 180;
-  x += cos( direc ) * dist;
-  y += sqrt( pow( dist, 2 ) - pow( x, 2 ) );
-  point_2d res = { x, y };
+Vector2 addVect2(Vector2 v1, Vector2 v2) {
+  Vector2 res;
+  res.x = v1.x + v2.x;
+  res.y = v1.y + v2.y;
   return res;
 }
 
-void movePlayer( int direction ) {
-  point_2d newPos;
-  switch ( direction ) {
+Vector2 subVect2(Vector2 v1, Vector2 v2) {
+  Vector2 res;
+  res.x = v1.x - v2.x;
+  res.y = v1.y - v2.y;
+  return res;
+}
+
+// Those functions must be optimized with arrays and intexes to make it cleaner
+void onKeypress( int keyPressed ) {
+  switch ( keyPressed ) {
     case SDLK_w:
-      newPos = calcMovement( 
-        player.x, 
-        player.y, 
-        player.direction, 
-        player.speed 
-      );
+      SDL_Log("Started moving forward");
+      controls.forward = 1;
       break;
     
     case SDLK_d:
-      newPos = calcMovement( 
-        player.x, 
-        player.y, 
-        player.direction + 90, 
-        player.speed 
-      );
+      SDL_Log("Started moving right");
+      controls.right = 1;
       break;
     
     case SDLK_s:
-      newPos = calcMovement( 
-        player.x, 
-        player.y, 
-        player.direction + 180, 
-        player.speed 
-      );
+      SDL_Log("Started moving backward");
+      controls.backward = 1;
       break;
 
     case SDLK_a:
-      newPos = calcMovement( 
-        player.x, 
-        player.y, 
-        player.direction + 270, 
-        player.speed 
-      );
+      SDL_Log("Started moving left");
+      controls.left = 1;
       break;
   }
+}
 
-  player.x = newPos.x;
-  player.y = newPos.y;
+void onKeyrelease( int keyReleased ) {
+  switch ( keyReleased ) {
+    case SDLK_w:
+      controls.forward = 0;
+      break;
+    
+    case SDLK_d:
+      controls.right = 0;
+      break;
+    
+    case SDLK_s:
+      controls.backward = 0;
+      break;
+
+    case SDLK_a:
+      controls.left = 0;
+      break;
+  }
+}
+
+void updatePlayer( ) {
+  if ( controls.forward ) {
+    player.position = addVect2(player.position, player.direction);
+  }
+  if ( controls.backward ) {
+    
+    player.position = subVect2(player.position, player.direction);
+  }
 }

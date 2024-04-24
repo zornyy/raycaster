@@ -28,14 +28,6 @@ int fixFramerate( ) {
   }
 }
 
-void handleKeyPress( int key ) {
-  // Update keyboard state
-}
-
-void handleKeyRelease( int key ) {
-  // Update keyboard state  
-}
-
 // Public functions
 void clearDisplay( ) {
   SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
@@ -101,11 +93,15 @@ int renderLoop( ) {
       if ( SDL_QUIT == windowEvent.type ) {
         isRunning = false;
       } else if ( SDL_KEYDOWN == windowEvent.type ) {
-        handleKeyPress( windowEvent.key.keysym.sym );
+        onKeypress( windowEvent.key.keysym.sym );
       } else if ( SDL_KEYUP == windowEvent.type ) {
-        handleKeyRelease( windowEvent.key.keysym.sym );
+        onKeyrelease( windowEvent.key.keysym.sym );
       }
     }
+
+    // Handle player movement & update
+    updatePlayer( );
+
     // Clear display before drawing frame
     clearDisplay( );
     
