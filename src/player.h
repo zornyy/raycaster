@@ -11,6 +11,7 @@ typedef struct {
 typedef struct {
   Vector2 position;
   Vector2 direction;
+  double angle;
 } player_t;
 
 typedef struct {
@@ -19,6 +20,10 @@ typedef struct {
   int right;
   int left;
 } controls_t;
+
+Vector2 unitVectorFromAngle( double angle );
+
+Vector2 normalizeVect2( Vector2 vect );
 
 int playerInit( double posX, double posY );
 
