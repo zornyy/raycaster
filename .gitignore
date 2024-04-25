@@ -1,6 +1,2 @@
 raycaster
-display.o
-player.o
-main.o
-ray.o
-map.o
+*.o
