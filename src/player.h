@@ -2,32 +2,30 @@
 #define raycaster
 
 #include <SDL2/SDL.h>
-
-typedef struct {
-  double x;
-  double y;
-} Vector2;
+#include "./vector.h"
 
 typedef struct {
   Vector2 position;
-  Vector2 direction;
+  Vector2 direction; 
   double angle;
 } player_t;
+// NOTE: I kept the direction vector even tho it is not strictly needed to avoid 
+// always having to calculate that vector from the angle
 
 typedef struct {
   int forward;
   int backward;
   int right;
   int left;
+  Vector2 mousePos;
+  double mouseSensitivity;
 } controls_t;
-
-Vector2 unitVectorFromAngle( double angle );
-
-Vector2 normalizeVect2( Vector2 vect );
 
 int playerInit( double posX, double posY );
 
 void drawPlayer( );
+
+void onMouseMoved( SDL_MouseMotionEvent motionEvent );
 
 void onKeypress( int keyPressed );
 

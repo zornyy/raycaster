@@ -1,5 +1,5 @@
-#ifndef raycaster
-#define raycaster
+#ifndef map
+#define map
 
 #include <SDL2/SDL.h>
 

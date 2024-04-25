@@ -2,8 +2,7 @@
 #include <SDL2/SDL.h>
 #include "player.h"
 #include "display.h"
-
-#define PI 3.14159265
+#include "vector.h"
 
 player_t player;
 controls_t controls;
@@ -16,6 +15,9 @@ void initControls( ) {
   controls.backward = 0;
   controls.right = 0;
   controls.right = 0;
+
+  controls.mousePos.x = 0, controls.mousePos.y = 0;
+  controls.mouseSensitivity = 1;
 }
 
 // This function initializes the player with it's position, direction etc. etc.
@@ -39,58 +41,42 @@ void drawPlayer( ) {
   playerRect.x = player.position.x - 5;
   playerRect.y = player.position.y - 5;
   drawRect( &playerRect, &purple );
+
+  Vector2 endOfLine = multiplyScalarVector2( player.direction, 5 );
+  drawLine( player.position, player.direction, &purple );
 }
 
-Vector2 addVect2(Vector2 v1, Vector2 v2) {
-  Vector2 res;
-  res.x = v1.x + v2.x;
-  res.y = v1.y + v2.y;
-  return res;
-}
+void onMouseMoved( SDL_MouseMotionEvent motionEvent ) {
+  // Calculate the x distance between them
+  double XOffset = controls.mousePos.x - motionEvent.x; 
 
-Vector2 subVect2(Vector2 v1, Vector2 v2) {
-  Vector2 res;
-  res.x = v1.x - v2.x;
-  res.y = v1.y - v2.y;
-  return res;
-}
+  SDL_Log("XOffset = %d", XOffset);
 
-Vector2 unitVectorFromAngle( double angle ) { 
-  angle = angle * PI / 180; // Convert to radians
-  Vector2 vect = {cos( angle ), sin( angle )}; // calculate unit vector for angle
-  return vect;
-}
+  // Update player direction accordingly
+  player.angle += XOffset * 100 * controls.mouseSensitivity;
+  player.direction = unitVectorFromAngle(player.angle);
 
-// I might want to use the fast inverse sqrt as a meme for this function (instead of doing expensive calculations)
-Vector2 normalizeVect2( Vector2 vect ) {
-  double norm = sqrt(vect.x * vect.x) + sqrt(vect.y * vect.y); // Calculate the norm
-  Vector2 unitVect; 
-  unitVect.x = 1 / norm * vect.x; // 1 / ||vect|| * vect => unit vector
-  unitVect.y = 1 / norm * vect.y; // Same for y component
-
-  return unitVect;
+  // Store the new position of the mouse
+  controls.mousePos.x = motionEvent.x;
+  controls.mousePos.y = motionEvent.y;
 }
 
 // Those functions must be optimized with arrays and intexes to make it cleaner
 void onKeypress( int keyPressed ) {
   switch ( keyPressed ) {
     case SDLK_w:
-      SDL_Log("Started moving forward");
       controls.forward = 1;
       break;
     
     case SDLK_d:
-      SDL_Log("Started moving right");
       controls.right = 1;
       break;
     
     case SDLK_s:
-      SDL_Log("Started moving backward");
       controls.backward = 1;
       break;
 
     case SDLK_a:
-      SDL_Log("Started moving left");
       controls.left = 1;
       break;
   }
@@ -121,7 +107,14 @@ void updatePlayer( ) {
     player.position = addVect2(player.position, player.direction);
   }
   if ( controls.backward ) {
-    
     player.position = subVect2(player.position, player.direction);
+  }
+  if ( controls.left ) {
+    player.angle -= 1;
+    player.direction = unitVectorFromAngle(player.angle);
+  }
+    if ( controls.right ) {
+      player.angle += 1;
+    player.direction = unitVectorFromAngle(player.angle);
   }
 }

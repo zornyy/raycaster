@@ -3,6 +3,7 @@
 #include "player.h"
 #include "display.h"
 #include "map.h"
+#include "vector.h"
 
 #define HEIGHT 1080
 #define WIDTH 1920
@@ -39,6 +40,11 @@ void drawRect( SDL_Rect *rect, SDL_Color *color ) {
   SDL_RenderFillRect( renderer, rect );
 }
 
+void drawLine( Vector2 start, Vector2 end, SDL_Color* color ) {
+  SDL_SetRenderDrawColor( renderer, color->r, color->g, color->b, color->a );
+  SDL_RenderDrawLine( renderer, start.x, start.y, end.x, end.y );
+}
+
 void drawMapTile( SDL_Rect *rect ) {
   SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
   SDL_RenderDrawRect( renderer, rect );
@@ -73,6 +79,10 @@ int displayInit( ) {
     return 1;
   }
 
+  // IDK why it does not work but it ain't urgent
+  // SDL_EnableKeyRepeat(0, 0); // Disables key repeat
+  SDL_CaptureMouse( SDL_TRUE );
+
   SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
   SDL_RenderClear( renderer );
   SDL_RenderPresent( renderer );
@@ -96,6 +106,8 @@ int renderLoop( ) {
         onKeypress( windowEvent.key.keysym.sym );
       } else if ( SDL_KEYUP == windowEvent.type ) {
         onKeyrelease( windowEvent.key.keysym.sym );
+      } else if ( SDL_MOUSEMOTION == windowEvent.type ) {
+        onMouseMoved( windowEvent.motion );
       }
     }
 
