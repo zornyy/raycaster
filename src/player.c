@@ -17,7 +17,7 @@ void initControls( ) {
   controls.right = 0;
 
   controls.mousePos.x = 0, controls.mousePos.y = 0;
-  controls.mouseSensitivity = 1;
+  controls.mouseSensitivity = 0.2;
 }
 
 // This function initializes the player with it's position, direction etc. etc.
@@ -42,23 +42,30 @@ void drawPlayer( ) {
   playerRect.y = player.position.y - 5;
   drawRect( &playerRect, &purple );
 
-  Vector2 endOfLine = multiplyScalarVector2( player.direction, 5 );
-  drawLine( player.position, player.direction, &purple );
+  Vector2 endOfLine = addVect2( multiplyScalarVector2( player.direction, 100 ), player.position);
+  drawLine( player.position, endOfLine, &purple );
 }
 
 void onMouseMoved( SDL_MouseMotionEvent motionEvent ) {
   // Calculate the x distance between them
   double XOffset = controls.mousePos.x - motionEvent.x; 
 
-  SDL_Log("XOffset = %d", XOffset);
+  SDL_Log("X Offset: %f", XOffset);
 
   // Update player direction accordingly
-  player.angle += XOffset * 100 * controls.mouseSensitivity;
+  player.angle += XOffset * controls.mouseSensitivity;
+
+  SDL_Log("Player angle: %f", player.angle);
+
   player.direction = unitVectorFromAngle(player.angle);
 
   // Store the new position of the mouse
   controls.mousePos.x = motionEvent.x;
   controls.mousePos.y = motionEvent.y;
+}
+
+void setMousePosition( Vector2 mPos ) {
+  controls.mousePos = mPos;
 }
 
 // Those functions must be optimized with arrays and intexes to make it cleaner

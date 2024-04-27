@@ -27,6 +27,8 @@ void drawPlayer( );
 
 void onMouseMoved( SDL_MouseMotionEvent motionEvent );
 
+void setMousePosition( Vector2 mPos );
+
 void onKeypress( int keyPressed );
 
 void onKeyrelease( int keyReleased);

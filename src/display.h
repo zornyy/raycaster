@@ -6,6 +6,8 @@
 #include "map.h"
 #include "vector.h"
 
+#define HEIGHT 1080
+#define WIDTH 1920
 
 // Functions definition
 int displayInit( );

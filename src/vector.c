@@ -1,3 +1,4 @@
+#include <math.h>
 #include "vector.h"
 
 #define PI 3.14159265

@@ -5,9 +5,6 @@
 #include "map.h"
 #include "vector.h"
 
-#define HEIGHT 1080
-#define WIDTH 1920
-
 
 // SDL Variables
 SDL_Window *window;
@@ -56,6 +53,27 @@ void drawPoint( double posX, double posY ) {
   SDL_Log( "Drew player at x = %f, y = %f", posX, posY );
 }
 
+void wrapMouse( ) {
+  int mouseX, mouseY;
+  SDL_GetMouseState( &mouseX, &mouseY );
+
+  if (mouseX <= 0) {
+    SDL_WarpMouseInWindow(window, WIDTH, mouseY); // Wrap to the right edge
+  } else if (mouseX >= WIDTH - 1) {
+    SDL_WarpMouseInWindow(window, 0, mouseY); // Wrap to the left edge
+  } 
+  
+  if (mouseY <= 0) {
+    SDL_WarpMouseInWindow(window, mouseX, HEIGHT); // Wrap to the bottom edge
+  } else if (mouseY >= HEIGHT - 1) {
+    SDL_WarpMouseInWindow(window, mouseX, 0); // Wrap to the top edge
+  }
+
+  Vector2 pos = {mouseX, mouseY};
+
+  setMousePosition(pos);
+}
+
 int displayInit( ) {
  SDL_Init( SDL_INIT_EVERYTHING );
 
@@ -81,7 +99,7 @@ int displayInit( ) {
 
   // IDK why it does not work but it ain't urgent
   // SDL_EnableKeyRepeat(0, 0); // Disables key repeat
-  SDL_CaptureMouse( SDL_TRUE );
+  SDL_SetRelativeMouseMode( SDL_TRUE );
 
   SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
   SDL_RenderClear( renderer );
@@ -113,6 +131,9 @@ int renderLoop( ) {
 
     // Handle player movement & update
     updatePlayer( );
+
+    // WrapMousePosition
+    wrapMouse( );
 
     // Clear display before drawing frame
     clearDisplay( );
