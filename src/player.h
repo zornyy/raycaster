@@ -25,9 +25,9 @@ int playerInit( double posX, double posY );
 
 void drawPlayer( );
 
-void onMouseMoved( SDL_MouseMotionEvent motionEvent );
+double getPlayerAngle( );
 
-void setMousePosition( Vector2 mPos );
+void setPlayerAngle( double angle );
 
 void onKeypress( int keyPressed );
 

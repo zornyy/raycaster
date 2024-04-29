@@ -16,6 +16,10 @@ const int frameDelay = 1000 / FPS;
 Uint64 frameStart;
 Uint64 frameTime;
 
+// Controls dep
+Vector2 mousePos = {0, 0};
+Vector2 screenCenter = {WIDTH / 2, HEIGHT / 2};
+
 
 // Private functions
 int fixFramerate( ) {
@@ -53,25 +57,14 @@ void drawPoint( double posX, double posY ) {
   SDL_Log( "Drew player at x = %f, y = %f", posX, posY );
 }
 
-void wrapMouse( ) {
-  int mouseX, mouseY;
-  SDL_GetMouseState( &mouseX, &mouseY );
+void onMouseMoved( SDL_MouseMotionEvent motionEvent ) {
+  double XOffset = screenCenter.x - motionEvent.x; // Get mouse offset
 
-  if (mouseX <= 0) {
-    SDL_WarpMouseInWindow(window, WIDTH, mouseY); // Wrap to the right edge
-  } else if (mouseX >= WIDTH - 1) {
-    SDL_WarpMouseInWindow(window, 0, mouseY); // Wrap to the left edge
-  } 
+  // Set the orientation of the character accordingly
+  setPlayerAngle( getPlayerAngle( ) - XOffset * 0.01 ); 
   
-  if (mouseY <= 0) {
-    SDL_WarpMouseInWindow(window, mouseX, HEIGHT); // Wrap to the bottom edge
-  } else if (mouseY >= HEIGHT - 1) {
-    SDL_WarpMouseInWindow(window, mouseX, 0); // Wrap to the top edge
-  }
-
-  Vector2 pos = {mouseX, mouseY};
-
-  setMousePosition(pos);
+  // Reset the mouse to the center
+  SDL_WarpMouseInWindow(window, screenCenter.x, screenCenter.y);
 }
 
 int displayInit( ) {
@@ -97,7 +90,7 @@ int displayInit( ) {
     return 1;
   }
 
-  // IDK why it does not work but it ain't urgent
+  // IDK why it does not work but it ain't urgent 
   // SDL_EnableKeyRepeat(0, 0); // Disables key repeat
   SDL_SetRelativeMouseMode( SDL_TRUE );
 
@@ -132,8 +125,8 @@ int renderLoop( ) {
     // Handle player movement & update
     updatePlayer( );
 
-    // WrapMousePosition
-    wrapMouse( );
+    // Wrap Mouse Position
+    // wrapMouse( );
 
     // Clear display before drawing frame
     clearDisplay( );

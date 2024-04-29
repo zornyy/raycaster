@@ -15,6 +15,7 @@ int displayInit( );
 int renderLoop( );
 
 void drawRect( SDL_Rect *rect, SDL_Color *color );
+
 void drawLine( Vector2 start, Vector2 end, SDL_Color* color );
 
 void drawMapTile( SDL_Rect *rect );
