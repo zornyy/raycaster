@@ -6,7 +6,7 @@
 
 int main( int argv, char *argc[] ) { 
   displayInit( );
-  playerInit( 100.0, 100.0 );
+  playerInit( 200.0, 200.0 );
   renderLoop( );
   return 0;
 }

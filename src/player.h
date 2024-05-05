@@ -8,6 +8,7 @@ typedef struct {
   Vector2 position;
   Vector2 direction; 
   double angle;
+  double speed;
 } player_t;
 // NOTE: I kept the direction vector even tho it is not strictly needed to avoid 
 // always having to calculate that vector from the angle

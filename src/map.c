@@ -6,7 +6,7 @@
 #define MAP_HEIGHT 9
 
 
-int miniMap[9][17] = {
+int miniMap[9][16] = {
   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
@@ -33,6 +33,13 @@ void drawMap( ) {
       }
     }
   }
+}
+
+int isWall( Vector2 point ) {
+  int squareX = (int)(point.x / 120);
+  int squareY = (int)(point.y / 120);
+
+  return miniMap[squareY][squareX];
 }
 
 

@@ -1,5 +1,6 @@
 #include <math.h>
 #include <SDL2/SDL.h>
+#include "map.h"
 #include "player.h"
 #include "display.h"
 #include "vector.h"
@@ -27,6 +28,7 @@ int playerInit( double posX, double posY ) {
   player.position.y = posY;
   player.angle = 35;
   player.direction = unitVectorFromAngle(player.angle);
+  player.speed = 2.5;
 
   playerRect.h = 10;
   playerRect.w = 10;
@@ -42,7 +44,6 @@ double getPlayerAngle( ) {
 
 void setPlayerAngle( double angle ) {
   player.angle = angle;
-
   player.direction = unitVectorFromAngle( player.angle );
 }
 
@@ -99,17 +100,26 @@ void onKeyrelease( int keyReleased ) {
 
 void updatePlayer( ) {
   player.direction = unitVectorFromAngle(player.angle);
+  
+  Vector2 newPos;
+  Vector2 movement;
 
   if ( controls.forward ) {
-    player.position = addVect2(player.position, player.direction);
+    movement = multiplyScalarVector2(player.direction, player.speed);
   }
   if ( controls.backward ) {
-    player.position = subVect2(player.position, player.direction);
+    movement = multiplyScalarVector2(unitVectorFromAngle(player.angle - 180), player.speed);
   }
   if ( controls.left ) {
-    player.position = addVect2(player.position, unitVectorFromAngle(player.angle - 90));
+    movement = multiplyScalarVector2(unitVectorFromAngle(player.angle - 90), player.speed);
   }
   if ( controls.right ) {
-    player.position = addVect2(player.position, unitVectorFromAngle(player.angle + 90));
+    movement = multiplyScalarVector2(unitVectorFromAngle(player.angle + 90), player.speed);
+  }
+
+  newPos = addVect2(player.position, movement);
+
+  if (!isWall(newPos)) {
+    player.position = newPos;
   }
 }
