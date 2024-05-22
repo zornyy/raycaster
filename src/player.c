@@ -1,9 +1,10 @@
 #include <math.h>
 #include <SDL2/SDL.h>
-#include "map.h"
+#include "gameMap.h"
 #include "player.h"
 #include "display.h"
 #include "vector.h"
+#include "ray.h"
 
 player_t player;
 controls_t controls;
@@ -53,7 +54,9 @@ void drawPlayer( ) {
   playerRect.y = player.position.y - 5;
   drawRect( &playerRect, &purple );
 
-  Vector2 endOfLine = addVect2( multiplyScalarVector2( player.direction, 100 ), player.position);
+  double length = getDistanceToWall(player.position, player.direction, 100.0);
+
+  Vector2 endOfLine = addVect2( multiplyScalarVector2( player.direction, length ), player.position);
   drawLine( player.position, endOfLine, &purple );
 }
 

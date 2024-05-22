@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include "map.h"
+#include "gameMap.h"
 #include "display.h"
 
 #define MAP_WIDTH 16

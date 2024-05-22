@@ -1,5 +1,5 @@
-#ifndef map
-#define map
+#ifndef gameMap
+#define gameMap
 
 #include <SDL2/SDL.h>
 #include "vector.h"

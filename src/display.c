@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include "player.h"
 #include "display.h"
-#include "map.h"
+#include "gameMap.h"
 #include "vector.h"
 
 

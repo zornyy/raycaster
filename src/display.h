@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include <SDL2/SDL.h>
-#include "map.h"
+#include "gameMap.h"
 #include "vector.h"
 
 #define HEIGHT 1080
