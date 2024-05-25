@@ -4,29 +4,49 @@
 #include "ray.h"
 #include "gameMap.h"
 
+// TEMP
+#include "display.h"
+#include <SDL2/SDL.h>
+
 double getDistanceToWall(Vector2 origin, Vector2 direction, double maxLength) {
-    SDL_Log("Function started");
+    
+    // THOSE WILL BE USED FOR DEBUGGING IF NEEDED
+    SDL_Rect test;
+    test.w = 10, test.h = 10;
+    SDL_Color purple;
+    purple.r = 255, purple.g = 0, purple.b = 255, purple.a = SDL_ALPHA_OPAQUE;
 
-    Vector2 end = addVect2(origin, multiplyScalarVector2(direction, maxLength));
-    Vector2 castedRay;
-    castedRay.x = origin.x - end.x, castedRay.y = origin.y - end.y;
+    // ACTUAL LOGIC
 
-    int steps = (abs(castedRay.x) > abs(castedRay.y)) ? abs(castedRay.x) : abs(castedRay.y);
-    SDL_Log("Steps: %d", steps);
+    double directionRatio = direction.x / direction.y;
+    
+    double incX = 120 * sqrt(1 + ( (1 / directionRatio) * (1 / directionRatio) ));
+    double incY = sqrt(1 + ( (1 * directionRatio) * (1 * directionRatio) ));
 
-    double incrementX = castedRay.x / steps;
-    double incrementY = castedRay.y / steps;
+    printf("Increment X: %f\nIncrement Y: %f\nDirectionRatio: %f\n\n", incX, incY, directionRatio);
 
-    Vector2 intersection;
-    for (int i = 0; i > steps; i++) {
-        intersection.x = origin.x + (i * incrementX);
-        intersection.y = origin.y + (i * incrementY); 
+    // Vector2 playerTile = getTile(origin);
+    // double offsetX = (origin.x / 120) - playerTile.x;
+    // double offsetY = (origin.y / 120) - playerTile.y; 
 
-        if (isWall(intersection)) {
-            return sqrt(pow(intersection.x - origin.x, 2) + pow(intersection.y - origin.y, 2));
-        }
-    }
+    Vector2 pointToCheck = origin;
 
-    SDL_Log("Came here");
-    return maxLength;
+    pointToCheck = addVect2(origin, multiplyScalarVector2(direction, incX));
+
+    pointToCheck.y += incX, pointToCheck.x += incY;
+    test.x = pointToCheck.x, test.y = pointToCheck.y;
+    drawRect(&test, &purple);
+    // pointToCheck.x += sqrt(offsetX + ( (offsetX / directionRatio) * (offsetX / directionRatio) ));
+    // pointToCheck.y += sqrt(offsetY + ( (offsetY * directionRatio) * (offsetY * directionRatio) ));
+
+    // for (int i; i < 20; i++) {
+    //     // isWall(pointToCheck);
+    //     test.x = pointToCheck.x, test.y = pointToCheck.y;
+    //     printf("Point position: (%d, %d)\n", test.x, test.y);
+    //     drawRect(&test, &purple);
+
+    //     pointToCheck.x += incX;
+    // }
+
+    return 100.0;
 }

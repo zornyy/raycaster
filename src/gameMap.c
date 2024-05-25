@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include "gameMap.h"
 #include "display.h"
+#include "vector.h"
 
 #define MAP_WIDTH 16
 #define MAP_HEIGHT 9
@@ -33,6 +34,15 @@ void drawMap( ) {
       }
     }
   }
+}
+
+// Returns the tile in which a vector is located
+Vector2 getTile(Vector2 point) {
+  Vector2 tile;
+  tile.x = (int)(point.x / 120);
+  tile.y = (int)(point.y / 120);
+  
+  return tile;
 }
 
 int isWall( Vector2 point ) {

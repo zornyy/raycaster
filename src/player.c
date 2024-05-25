@@ -54,9 +54,9 @@ void drawPlayer( ) {
   playerRect.y = player.position.y - 5;
   drawRect( &playerRect, &purple );
 
-  double length = getDistanceToWall(player.position, player.direction, 100.0);
+  double length = getDistanceToWall(player.position, player.direction, 1000.0);
 
-  Vector2 endOfLine = addVect2( multiplyScalarVector2( player.direction, length ), player.position);
+  Vector2 endOfLine = addVect2( multiplyScalarVector2( player.direction, 1000 ), player.position);
   drawLine( player.position, endOfLine, &purple );
 }
 

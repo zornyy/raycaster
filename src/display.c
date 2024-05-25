@@ -54,7 +54,6 @@ void drawMapTile( SDL_Rect *rect ) {
 void drawPoint( double posX, double posY ) {
   SDL_SetRenderDrawColor( renderer, 255, 0, 255, 255 );
   SDL_RenderDrawPoint( renderer, posX, posY );
-  SDL_Log( "Drew player at x = %f, y = %f", posX, posY );
 }
 
 void onMouseMoved( SDL_MouseMotionEvent motionEvent ) {
